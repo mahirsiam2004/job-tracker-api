@@ -1,9 +1,7 @@
 const express = require('express');
 const router = express.Router();
+const {getAllJobs} = require('../controllers/job.controller')
 
-
-router.get('/', (req,res)=>{
-    res.send("all jobs route")
-})
+router.get('/', getAllJobs);
 
 module.exports= router
