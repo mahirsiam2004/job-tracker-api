@@ -2,4 +2,10 @@ const getAllJobs = (req,res)=>{
     res.send("all jobs");
 };
 
-module.exports={getAllJobs}
+const createJob = (req,res)=>{
+    res.json({
+        "message":" Job created successfully"
+    })
+}
+
+module.exports={getAllJobs,createJob}
