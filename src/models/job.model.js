@@ -1,3 +1,4 @@
+const { ObjectId } = require("mongodb");
 const { client } = require("../config/db");
 
 const getJobsCollection = () => {
@@ -31,7 +32,17 @@ const getAllJobs = async (search, status) => {
   return await jobsCollection.find(query).toArray();
 };
 
+
+const  getJobByIdModel =async (id) =>{
+    const jobsCollection = getJobsCollection();
+const result = await jobsCollection.findOne({
+  _id : new ObjectId(id)
+})
+return result;
+}
+
 module.exports = {
   createJob,
   getAllJobs,
+  getJobByIdModel
 };

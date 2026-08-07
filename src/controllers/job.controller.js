@@ -1,6 +1,7 @@
 const {
   createJob: createJobModel,
   getAllJobs: getJobsModel,
+  getJobByIdModel
 } = require("../models/job.model");
 
 const getAllJobs = async (req, res) => {
@@ -27,4 +28,16 @@ const createJob = async (req, res) => {
   });
 };
 
-module.exports = { getAllJobs, createJob };
+
+const getJobById = async (req,res)=> {
+  const {id} = req.params;
+  const job = await getJobByIdModel(id);
+      res.status(200).json({
+        success: true,
+        message: "Job fetched successfully",
+        data: job
+    });
+
+}
+
+module.exports = { getAllJobs, createJob,getJobById };
