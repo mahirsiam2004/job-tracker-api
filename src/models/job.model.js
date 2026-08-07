@@ -12,6 +12,26 @@ const createJob = async (jobData) => {
   return result;
 };
 
+const getAllJobs = async (search, status) => {
+  const jobsCollection = getJobsCollection();
+
+  let query = {};
+
+  if (search) {
+    query = {
+      title: {
+        $regex: search,
+        $options: "i",
+      },
+    };
+  }
+  if (status) {
+    query.status = status;
+  }
+  return await jobsCollection.find(query).toArray();
+};
+
 module.exports = {
   createJob,
+  getAllJobs,
 };
