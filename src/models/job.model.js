@@ -53,9 +53,25 @@ const jobUpdate = async (id, jobData) => {
   return result;
 };
 
+
+
+const deleteJob = async (id) => {
+  const jobsCollection = getjo;
+
+  const filter = {
+    _id: new ObjectId(id)
+  };
+
+  const result = await jobsCollection.deleteOne(filter);
+
+  return result;
+};
+
+
 module.exports = {
   createJob,
   getAllJobs,
   getJobByIdModel,
   jobUpdate,
+  deleteJob
 };

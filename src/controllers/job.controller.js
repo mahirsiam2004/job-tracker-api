@@ -4,6 +4,7 @@ const {
   getAllJobs: getJobsModel,
   getJobByIdModel,
   jobUpdate: jobUpdateModel,
+  deleteJob:deleteJobModel,
 } = require("../models/job.model");
 
 const getAllJobs = async (req, res) => {
@@ -80,4 +81,29 @@ const updateJob = async (req, res) => {
   });
 };
 
-module.exports = { getAllJobs, createJob, getJobById, updateJob };
+const deleteJob = async (req, res) => {
+
+  const { id } = req.params;
+  if (!ObjectId.isValid(id)) {
+  return res.status(400).json({
+    success: false,
+    message: "Invalid job ID",
+  });
+}
+
+const result = await deleteJobModel(id);
+if (result.deletedCount === 0) {
+       return res.status(404).json({
+      success: false,
+     message: "Job not found",
+    });
+}
+
+  res.status(200).json({
+    success: true,
+    message: "Job deleted ",
+ 
+  });
+};
+
+module.exports = { getAllJobs, createJob, getJobById, updateJob ,deleteJob};
