@@ -46,10 +46,10 @@ const jobUpdate = async (id, jobData) => {
   const update = {
     $set: jobData,
   };
-  const result = await jobsCollection.updateOne({
+  const result = await jobsCollection.updateOne(
     filter,
     update,
-  });
+  );
   return result;
 };
 
