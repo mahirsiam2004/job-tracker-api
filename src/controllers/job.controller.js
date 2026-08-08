@@ -3,6 +3,7 @@ const {
   createJob: createJobModel,
   getAllJobs: getJobsModel,
   getJobByIdModel,
+  jobUpdate:jobUpdateModel,
 } = require("../models/job.model");
 
 const getAllJobs = async (req, res) => {
@@ -51,4 +52,21 @@ const getJobById = async (req, res) => {
   });
 };
 
-module.exports = { getAllJobs, createJob, getJobById };
+const updateJob = async (req, res) => {
+  const { id } = req.params;
+  if (!ObjectId.isValid(id)) {
+    return res.status(400).json({
+      success: false,
+      message: "Invalid job ID",
+    });
+  }
+  const jobData = req.body;
+  const result = jobUpdateModel(jobData);
+  res.status(200).json({
+    success: true,
+    message: "Job updated successfully",
+    data: jobData,
+  });
+};
+
+module.exports = { getAllJobs, createJob, getJobById,updateJob };

@@ -32,17 +32,30 @@ const getAllJobs = async (search, status) => {
   return await jobsCollection.find(query).toArray();
 };
 
+const getJobByIdModel = async (id) => {
+  const jobsCollection = getJobsCollection();
+  const result = await jobsCollection.findOne({
+    _id: new ObjectId(id),
+  });
+  return result;
+};
 
-const  getJobByIdModel =async (id) =>{
-    const jobsCollection = getJobsCollection();
-const result = await jobsCollection.findOne({
-  _id : new ObjectId(id)
-})
-return result;
-}
+const jobUpdate = async (id, jobData) => {
+  const jobsCollection = getJobsCollection();
+  const filter = { _id: new ObjectId(id) };
+  const update = {
+    $set: jobData,
+  };
+  const result = await jobsCollection.updateOne({
+    filter,
+    update,
+  });
+  return result;
+};
 
 module.exports = {
   createJob,
   getAllJobs,
-  getJobByIdModel
+  getJobByIdModel,
+  jobUpdate,
 };
