@@ -1,22 +1,22 @@
+const { ObjectId } = require("mongodb");
 const {
   createJob: createJobModel,
   getAllJobs: getJobsModel,
-  getJobByIdModel
+  getJobByIdModel,
 } = require("../models/job.model");
 
 const getAllJobs = async (req, res) => {
-    const search = req.query.search;
-    const status = req.query.status;
+  const search = req.query.search;
+  const status = req.query.status;
 
-    const jobs = await getJobsModel(search,status);
+  const jobs = await getJobsModel(search, status);
 
-    res.status(200).json({
-        success: true,
-        message: "Jobs fetched successfully",
-        data: jobs
-    });
+  res.status(200).json({
+    success: true,
+    message: "Jobs fetched successfully",
+    data: jobs,
+  });
 };
-
 
 const createJob = async (req, res) => {
   const jobData = req.body;
@@ -28,16 +28,27 @@ const createJob = async (req, res) => {
   });
 };
 
+const getJobById = async (req, res) => {
+  const { id } = req.params;
 
-const getJobById = async (req,res)=> {
-  const {id} = req.params;
-  const job = await getJobByIdModel(id);
-      res.status(200).json({
-        success: true,
-        message: "Job fetched successfully",
-        data: job
+  if (!ObjectId.isValid(id)) {
+    return res.status(400).json({
+      success: false,
+      message: "Invalid job ID",
     });
+  }
+  const job = await getJobByIdModel(id);
+  if (!job) {
+    return res.status(404).json({
+      success: false,
+      message: "Job not found",
+    });
+  }
+  res.status(200).json({
+    success: true,
+    message: "Job fetched successfully",
+    data: job,
+  });
+};
 
-}
-
-module.exports = { getAllJobs, createJob,getJobById };
+module.exports = { getAllJobs, createJob, getJobById };
