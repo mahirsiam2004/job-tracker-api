@@ -4,20 +4,24 @@ const {
   getAllJobs: getJobsModel,
   getJobByIdModel,
   jobUpdate: jobUpdateModel,
-  deleteJob:deleteJobModel,
+  deleteJob: deleteJobModel,
 } = require("../models/job.model");
 
-const getAllJobs = async (req, res) => {
+const getAllJobs = async (req, res,next) => {
   const search = req.query.search;
   const status = req.query.status;
 
-  const jobs = await getJobsModel(search, status);
+  try {
+    const jobs = await getJobsModel(search, status);
 
-  res.status(200).json({
-    success: true,
-    message: "Jobs fetched successfully",
-    data: jobs,
-  });
+    res.status(200).json({
+      success: true,
+      message: "Jobs fetched successfully",
+      data: jobs,
+    });
+  } catch (error) {
+    next(error);
+  }
 };
 
 const createJob = async (req, res) => {
@@ -82,28 +86,28 @@ const updateJob = async (req, res) => {
 };
 
 const deleteJob = async (req, res) => {
-
   const { id } = req.params;
-  if (!ObjectId.isValid(id)) {
-  return res.status(400).json({
-    success: false,
-    message: "Invalid job ID",
-  });
-}
 
-const result = await deleteJobModel(id);
-if (result.deletedCount === 0) {
-       return res.status(404).json({
+  if (!ObjectId.isValid(id)) {
+    return res.status(400).json({
       success: false,
-     message: "Job not found",
+      message: "Invalid job ID",
     });
-}
+  }
+
+  const result = await deleteJobModel(id);
+
+  if (result.deletedCount === 0) {
+    return res.status(404).json({
+      success: false,
+      message: "Job not found",
+    });
+  }
 
   res.status(200).json({
     success: true,
-    message: "Job deleted ",
- 
+    message: "Job deleted successfully",
   });
 };
 
-module.exports = { getAllJobs, createJob, getJobById, updateJob ,deleteJob};
+module.exports = { getAllJobs, createJob, getJobById, updateJob, deleteJob };
