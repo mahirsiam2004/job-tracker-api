@@ -7,22 +7,21 @@ const {
   deleteJob: deleteJobModel,
 } = require("../models/job.model");
 
-const getAllJobs = async (req, res,next) => {
+const  asyncHandler  = require("../utils/asyncHandler");
+
+
+const getAllJobs = asyncHandler(async (req, res) => {
   const search = req.query.search;
   const status = req.query.status;
 
-  try {
-    const jobs = await getJobsModel(search, status);
+  const jobs = await getJobsModel(search, status);
 
-    res.status(200).json({
-      success: true,
-      message: "Jobs fetched successfully",
-      data: jobs,
-    });
-  } catch (error) {
-    next(error);
-  }
-};
+  res.status(200).json({
+    success: true,
+    message: "Jobs fetched successfully",
+    data: jobs,
+  });
+});
 
 const createJob = async (req, res) => {
   const jobData = req.body;
